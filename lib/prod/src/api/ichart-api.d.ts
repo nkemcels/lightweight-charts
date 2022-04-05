@@ -1,14 +1,14 @@
-import { DeepPartial } from '../helpers/strict-type-checks';
-import { BarPrice, BarPrices } from '../model/bar';
-import { ChartOptions } from '../model/chart-model';
-import { Point } from '../model/point';
-import { SeriesMarker } from '../model/series-markers';
-import { AreaSeriesPartialOptions, BarSeriesPartialOptions, BaselineSeriesPartialOptions, CandlestickSeriesPartialOptions, HistogramSeriesPartialOptions, LineSeriesPartialOptions, SeriesType } from '../model/series-options';
-import { BusinessDay, UTCTimestamp } from '../model/time-data';
-import { Time } from './data-consumer';
-import { IPriceScaleApi } from './iprice-scale-api';
-import { ISeriesApi } from './iseries-api';
-import { ITimeScaleApi } from './itime-scale-api';
+import { DeepPartial } from "../helpers/strict-type-checks";
+import { BarPrice, BarPrices } from "../model/bar";
+import { ChartOptions } from "../model/chart-model";
+import { Point } from "../model/point";
+import { SeriesMarker } from "../model/series-markers";
+import { AreaSeriesPartialOptions, BarSeriesPartialOptions, BaselineSeriesPartialOptions, CandlestickSeriesPartialOptions, HistogramSeriesPartialOptions, LineSeriesPartialOptions, SeriesType } from "../model/series-options";
+import { BusinessDay, UTCTimestamp } from "../model/time-data";
+import { Time } from "./data-consumer";
+import { IPriceScaleApi } from "./iprice-scale-api";
+import { ISeriesApi } from "./iseries-api";
+import { ITimeScaleApi } from "./itime-scale-api";
 /**
  * Represents a mouse event.
  */
@@ -39,7 +39,7 @@ export interface MouseEventParams {
     /**
      * The ID of the marker at the point of the mouse event.
      */
-    hoveredMarkerId?: SeriesMarker<Time>['id'];
+    hoveredMarkerId?: SeriesMarker<Time>["id"];
 }
 /**
  * A custom function use to handle mouse events.
@@ -71,7 +71,7 @@ export interface IChartApi {
      * const series = chart.addAreaSeries();
      * ```
      */
-    addAreaSeries(areaOptions?: AreaSeriesPartialOptions): ISeriesApi<'Area'>;
+    addAreaSeries(areaOptions?: AreaSeriesPartialOptions): ISeriesApi<"Area">;
     /**
      * Creates a baseline series with specified parameters.
      *
@@ -82,7 +82,7 @@ export interface IChartApi {
      * const series = chart.addBaselineSeries();
      * ```
      */
-    addBaselineSeries(baselineOptions?: BaselineSeriesPartialOptions): ISeriesApi<'Baseline'>;
+    addBaselineSeries(baselineOptions?: BaselineSeriesPartialOptions): ISeriesApi<"Baseline">;
     /**
      * Creates a bar series with specified parameters.
      *
@@ -93,7 +93,7 @@ export interface IChartApi {
      * const series = chart.addBarSeries();
      * ```
      */
-    addBarSeries(barOptions?: BarSeriesPartialOptions): ISeriesApi<'Bar'>;
+    addBarSeries(barOptions?: BarSeriesPartialOptions): ISeriesApi<"Bar">;
     /**
      * Creates a candlestick series with specified parameters.
      *
@@ -104,7 +104,7 @@ export interface IChartApi {
      * const series = chart.addCandlestickSeries();
      * ```
      */
-    addCandlestickSeries(candlestickOptions?: CandlestickSeriesPartialOptions): ISeriesApi<'Candlestick'>;
+    addCandlestickSeries(candlestickOptions?: CandlestickSeriesPartialOptions): ISeriesApi<"Candlestick">;
     /**
      * Creates a histogram series with specified parameters.
      *
@@ -115,7 +115,7 @@ export interface IChartApi {
      * const series = chart.addHistogramSeries();
      * ```
      */
-    addHistogramSeries(histogramOptions?: HistogramSeriesPartialOptions): ISeriesApi<'Histogram'>;
+    addHistogramSeries(histogramOptions?: HistogramSeriesPartialOptions): ISeriesApi<"Histogram">;
     /**
      * Creates a line series with specified parameters.
      *
@@ -126,7 +126,7 @@ export interface IChartApi {
      * const series = chart.addLineSeries();
      * ```
      */
-    addLineSeries(lineOptions?: LineSeriesPartialOptions): ISeriesApi<'Line'>;
+    addLineSeries(lineOptions?: LineSeriesPartialOptions): ISeriesApi<"Line">;
     /**
      * Removes a series of any type. This is an irreversible operation, you cannot do anything with the series after removing it.
      *
@@ -223,4 +223,5 @@ export interface IChartApi {
      * @returns A canvas with the chart drawn on. Any `Canvas` methods like `toDataURL()` or `toBlob()` can be used to serialize the result.
      */
     takeScreenshot(): HTMLCanvasElement;
+    setCrossHairXY(x: number, y: number, visible: boolean): void;
 }

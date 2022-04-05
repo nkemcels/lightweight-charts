@@ -1239,6 +1239,7 @@ export interface IChartApi {
 	 * @returns A canvas with the chart drawn on. Any `Canvas` methods like `toDataURL()` or `toBlob()` can be used to serialize the result.
 	 */
 	takeScreenshot(): HTMLCanvasElement;
+	setCrossHairXY(x: number, y: number, visible: boolean): void;
 }
 /** Interface to be implemented by the object in order to be used as a price formatter */
 export interface IPriceFormatter {

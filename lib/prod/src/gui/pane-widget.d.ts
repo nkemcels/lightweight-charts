@@ -1,17 +1,17 @@
-import { IDestroyable } from '../helpers/idestroyable';
-import { ISubscription } from '../helpers/isubscription';
-import { HoveredObject } from '../model/chart-model';
-import { Coordinate } from '../model/coordinate';
-import { InvalidationLevel } from '../model/invalidate-mask';
-import { IPriceDataSource } from '../model/iprice-data-source';
-import { Pane } from '../model/pane';
-import { Point } from '../model/point';
-import { TimePointIndex } from '../model/time-data';
-import { IPaneView } from '../views/pane/ipane-view';
-import { Size } from './canvas-utils';
-import { ChartWidget } from './chart-widget';
-import { MouseEventHandlerMouseEvent, MouseEventHandlers, MouseEventHandlerTouchEvent, Position } from './mouse-event-handler';
-import { PriceAxisWidget, PriceAxisWidgetSide } from './price-axis-widget';
+import { IDestroyable } from "../helpers/idestroyable";
+import { ISubscription } from "../helpers/isubscription";
+import { HoveredObject } from "../model/chart-model";
+import { Coordinate } from "../model/coordinate";
+import { InvalidationLevel } from "../model/invalidate-mask";
+import { IPriceDataSource } from "../model/iprice-data-source";
+import { Pane } from "../model/pane";
+import { Point } from "../model/point";
+import { TimePointIndex } from "../model/time-data";
+import { IPaneView } from "../views/pane/ipane-view";
+import { Size } from "./canvas-utils";
+import { ChartWidget } from "./chart-widget";
+import { MouseEventHandlerMouseEvent, MouseEventHandlers, MouseEventHandlerTouchEvent, Position } from "./mouse-event-handler";
+import { PriceAxisWidget, PriceAxisWidgetSide } from "./price-axis-widget";
 export interface HitTestResult {
     source: IPriceDataSource;
     object?: HoveredObject;
@@ -73,6 +73,8 @@ export declare class PaneWidget implements IDestroyable, MouseEventHandlers {
     paint(type: InvalidationLevel): void;
     leftPriceAxisWidget(): PriceAxisWidget | null;
     rightPriceAxisWidget(): PriceAxisWidget | null;
+    setCrossHair(xx: number, yy: number, visible: boolean): void;
+    private _setCrosshairPositionNoFire;
     private _onStateDestroyed;
     private _drawBackground;
     private _drawGrid;
@@ -87,6 +89,7 @@ export declare class PaneWidget implements IDestroyable, MouseEventHandlers {
     private _correctYCoord;
     private _setCrosshairPosition;
     private _clearCrosshairPosition;
+    private _clearCrosshairPositionNoFire;
     private _tryExitTrackingMode;
     private _startTrackingMode;
     private _model;

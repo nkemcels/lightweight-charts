@@ -1,23 +1,23 @@
-import { IDestroyable } from '../helpers/idestroyable';
-import { ISubscription } from '../helpers/isubscription';
-import { DeepPartial } from '../helpers/strict-type-checks';
-import { PriceAxisViewRendererOptions } from '../renderers/iprice-axis-view-renderer';
-import { PriceAxisRendererOptionsProvider } from '../renderers/price-axis-renderer-options-provider';
-import { Coordinate } from './coordinate';
-import { Crosshair, CrosshairOptions } from './crosshair';
-import { GridOptions } from './grid';
-import { InvalidateMask } from './invalidate-mask';
-import { IPriceDataSource } from './iprice-data-source';
-import { LayoutOptions, LayoutOptionsInternal } from './layout-options';
-import { LocalizationOptions } from './localization-options';
-import { Pane } from './pane';
-import { Point } from './point';
-import { PriceScale, PriceScaleOptions } from './price-scale';
-import { Series } from './series';
-import { SeriesOptionsMap, SeriesType } from './series-options';
-import { LogicalRange, TimePointIndex, TimeScalePoint } from './time-data';
-import { TimeScale, TimeScaleOptions } from './time-scale';
-import { Watermark, WatermarkOptions } from './watermark';
+import { IDestroyable } from "../helpers/idestroyable";
+import { ISubscription } from "../helpers/isubscription";
+import { DeepPartial } from "../helpers/strict-type-checks";
+import { PriceAxisViewRendererOptions } from "../renderers/iprice-axis-view-renderer";
+import { PriceAxisRendererOptionsProvider } from "../renderers/price-axis-renderer-options-provider";
+import { Coordinate } from "./coordinate";
+import { Crosshair, CrosshairOptions } from "./crosshair";
+import { GridOptions } from "./grid";
+import { InvalidateMask } from "./invalidate-mask";
+import { IPriceDataSource } from "./iprice-data-source";
+import { LayoutOptions, LayoutOptionsInternal } from "./layout-options";
+import { LocalizationOptions } from "./localization-options";
+import { Pane } from "./pane";
+import { Point } from "./point";
+import { PriceScale, PriceScaleOptions } from "./price-scale";
+import { Series } from "./series";
+import { SeriesOptionsMap, SeriesType } from "./series-options";
+import { LogicalRange, TimePointIndex, TimeScalePoint } from "./time-data";
+import { TimeScale, TimeScaleOptions } from "./time-scale";
+import { Watermark, WatermarkOptions } from "./watermark";
 /**
  * Represents options for how the chart is scrolled by the mouse and touch gestures.
  */
@@ -95,7 +95,7 @@ export interface KineticScrollOptions {
      */
     mouse: boolean;
 }
-declare type HandleScaleOptionsInternal = Omit<HandleScaleOptions, 'axisPressedMouseMove'> & {
+declare type HandleScaleOptionsInternal = Omit<HandleScaleOptions, "axisPressedMouseMove"> & {
     /** @public */
     axisPressedMouseMove: AxisPressedMouseMoveOptions;
 };
@@ -138,7 +138,7 @@ export declare type VisiblePriceScaleOptions = PriceScaleOptions;
 /**
  * Represents overlay price scale options.
  */
-export declare type OverlayPriceScaleOptions = Omit<PriceScaleOptions, 'visible' | 'autoScale'>;
+export declare type OverlayPriceScaleOptions = Omit<PriceScaleOptions, "visible" | "autoScale">;
 /**
  * Determine how to exit the tracking mode.
  *
@@ -243,7 +243,7 @@ export interface ChartOptions {
      */
     trackingMode: TrackingModeOptions;
 }
-export declare type ChartOptionsInternal = Omit<ChartOptions, 'handleScroll' | 'handleScale' | 'priceScale' | 'layout'> & {
+export declare type ChartOptionsInternal = Omit<ChartOptions, "handleScroll" | "handleScale" | "priceScale" | "layout"> & {
     /** @public */
     handleScroll: HandleScrollOptions;
     /** @public */
@@ -312,6 +312,7 @@ export declare class ChartModel implements IDestroyable {
     serieses(): readonly Series[];
     setAndSaveCurrentPosition(x: Coordinate, y: Coordinate, pane: Pane): void;
     clearCurrentPosition(): void;
+    clearCurrentPositionNoFire(): void;
     updateCrosshair(): void;
     updateTimeScale(newBaseIndex: TimePointIndex | null, newPoints?: readonly TimeScalePoint[], firstChangedPointIndex?: number): void;
     recalculatePane(pane: Pane | null): void;
@@ -333,6 +334,7 @@ export declare class ChartModel implements IDestroyable {
     backgroundBottomColor(): string;
     backgroundTopColor(): string;
     backgroundColorAtYPercentFromTop(percent: number): string;
+    setAndSaveCurrentPositionFire(x: Coordinate, y: Coordinate, fire: boolean, pane: Pane): void;
     private _paneInvalidationMask;
     private _invalidationMaskForSource;
     private _invalidate;
