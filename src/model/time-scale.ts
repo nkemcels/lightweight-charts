@@ -303,7 +303,6 @@ export class TimeScale {
 	): TimePointIndex | null {
 		if (this._points.length < 1) {
 			// no time points available
-			console.log("[LW]: No time points are available");
 			return null;
 		}
 
