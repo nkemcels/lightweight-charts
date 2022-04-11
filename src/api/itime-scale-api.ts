@@ -1,10 +1,10 @@
-import { DeepPartial } from '../helpers/strict-type-checks';
+import { DeepPartial } from "../helpers/strict-type-checks";
 
-import { Coordinate } from '../model/coordinate';
-import { Logical, LogicalRange, Range } from '../model/time-data';
-import { TimeScaleOptions } from '../model/time-scale';
+import { Coordinate } from "../model/coordinate";
+import { Logical, LogicalRange, Range } from "../model/time-data";
+import { TimeScaleOptions } from "../model/time-scale";
 
-import { Time } from './data-consumer';
+import { Time } from "./data-consumer";
 
 /**
  * Represents a {@link Time} range.
@@ -18,7 +18,9 @@ export type TimeRangeChangeEventHandler = (timeRange: TimeRange | null) => void;
 /**
  * A custom function used to handle changes to the time scale's logical range.
  */
-export type LogicalRangeChangeEventHandler = (logicalRange: LogicalRange | null) => void;
+export type LogicalRangeChangeEventHandler = (
+	logicalRange: LogicalRange | null
+) => void;
 /**
  * A custom function used to handle changes to the time scale's size.
  */
@@ -123,7 +125,7 @@ export interface ITimeScaleApi {
 	 * @param time - Time needs to be converted
 	 * @returns X coordinate of that time or `null` if no time found on time scale
 	 */
-	timeToCoordinate(time: Time): Coordinate | null;
+	timeToCoordinate(time: Time, findNearest?: boolean): Coordinate | null;
 
 	/**
 	 * Converts a coordinate to time.
@@ -194,7 +196,9 @@ export interface ITimeScaleApi {
 	 * chart.timeScale().subscribeVisibleLogicalRangeChange(myVisibleLogicalRangeChangeHandler);
 	 * ```
 	 */
-	subscribeVisibleLogicalRangeChange(handler: LogicalRangeChangeEventHandler): void;
+	subscribeVisibleLogicalRangeChange(
+		handler: LogicalRangeChangeEventHandler
+	): void;
 
 	/**
 	 * Unsubscribe a handler that was previously subscribed using {@link subscribeVisibleLogicalRangeChange}.
@@ -205,7 +209,9 @@ export interface ITimeScaleApi {
 	 * chart.timeScale().unsubscribeVisibleLogicalRangeChange(myVisibleLogicalRangeChangeHandler);
 	 * ```
 	 */
-	unsubscribeVisibleLogicalRangeChange(handler: LogicalRangeChangeEventHandler): void;
+	unsubscribeVisibleLogicalRangeChange(
+		handler: LogicalRangeChangeEventHandler
+	): void;
 
 	/**
 	 * Adds a subscription to time scale size changes

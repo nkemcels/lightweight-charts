@@ -1,20 +1,20 @@
-import { DateFormatter } from '../formatters/date-formatter';
-import { DateTimeFormatter } from '../formatters/date-time-formatter';
+import { DateFormatter } from "../formatters/date-formatter";
+import { DateTimeFormatter } from "../formatters/date-time-formatter";
 
-import { lowerbound } from '../helpers/algorithms';
-import { ensureNotNull } from '../helpers/assertions';
-import { Delegate } from '../helpers/delegate';
-import { ISubscription } from '../helpers/isubscription';
-import { clamp } from '../helpers/mathex';
-import { DeepPartial, isInteger, merge } from '../helpers/strict-type-checks';
+import { lowerbound } from "../helpers/algorithms";
+import { ensureNotNull } from "../helpers/assertions";
+import { Delegate } from "../helpers/delegate";
+import { ISubscription } from "../helpers/isubscription";
+import { clamp } from "../helpers/mathex";
+import { DeepPartial, isInteger, merge } from "../helpers/strict-type-checks";
 
-import { ChartModel } from './chart-model';
-import { Coordinate } from './coordinate';
-import { defaultTickMarkFormatter } from './default-tick-mark-formatter';
-import { FormattedLabelsCache } from './formatted-labels-cache';
-import { LocalizationOptions } from './localization-options';
-import { areRangesEqual, RangeImpl } from './range-impl';
-import { TickMarks } from './tick-marks';
+import { ChartModel } from "./chart-model";
+import { Coordinate } from "./coordinate";
+import { defaultTickMarkFormatter } from "./default-tick-mark-formatter";
+import { FormattedLabelsCache } from "./formatted-labels-cache";
+import { LocalizationOptions } from "./localization-options";
+import { areRangesEqual, RangeImpl } from "./range-impl";
+import { TickMarks } from "./tick-marks";
 import {
 	BusinessDay,
 	Logical,
@@ -27,8 +27,8 @@ import {
 	TimePointsRange,
 	TimeScalePoint,
 	UTCTimestamp,
-} from './time-data';
-import { TimeScaleVisibleRange } from './time-scale-visible-range';
+} from "./time-data";
+import { TimeScaleVisibleRange } from "./time-scale-visible-range";
 
 const enum Constants {
 	DefaultAnimationDuration = 400,
@@ -89,7 +89,11 @@ export const enum TickMarkType {
  * };
  * ```
  */
-export type TickMarkFormatter = (time: UTCTimestamp | BusinessDay, tickMarkType: TickMarkType, locale: string) => string;
+export type TickMarkFormatter = (
+	time: UTCTimestamp | BusinessDay,
+	tickMarkType: TickMarkType,
+	locale: string
+) => string;
 
 /**
  * Options for the time scale; the horizontal scale at the bottom of the chart that displays the time of data.
@@ -213,7 +217,8 @@ export class TimeScale {
 	private readonly _tickMarks: TickMarks = new TickMarks();
 	private _formattedByWeight: Map<number, FormattedLabelsCache> = new Map();
 
-	private _visibleRange: TimeScaleVisibleRange = TimeScaleVisibleRange.invalid();
+	private _visibleRange: TimeScaleVisibleRange =
+		TimeScaleVisibleRange.invalid();
 	private _visibleRangeInvalidated: boolean = true;
 
 	private readonly _visibleBarsChanged: Delegate = new Delegate();
@@ -225,7 +230,11 @@ export class TimeScale {
 
 	private _labels: TimeMark[] = [];
 
-	public constructor(model: ChartModel, options: TimeScaleOptions, localizationOptions: LocalizationOptions) {
+	public constructor(
+		model: ChartModel,
+		options: TimeScaleOptions,
+		localizationOptions: LocalizationOptions
+	) {
 		this._options = options;
 		this._localizationOptions = localizationOptions;
 		this._rightOffset = options.rightOffset;
@@ -239,14 +248,19 @@ export class TimeScale {
 		return this._options;
 	}
 
-	public applyLocalizationOptions(localizationOptions: DeepPartial<LocalizationOptions>): void {
+	public applyLocalizationOptions(
+		localizationOptions: DeepPartial<LocalizationOptions>
+	): void {
 		merge(this._localizationOptions, localizationOptions);
 
 		this._invalidateTickMarks();
 		this._updateDateTimeFormatter();
 	}
 
-	public applyOptions(options: DeepPartial<TimeScaleOptions>, localizationOptions?: DeepPartial<LocalizationOptions>): void {
+	public applyOptions(
+		options: DeepPartial<TimeScaleOptions>,
+		localizationOptions?: DeepPartial<LocalizationOptions>
+	): void {
 		merge(this._options, options);
 
 		if (this._options.fixLeftEdge) {
@@ -283,28 +297,40 @@ export class TimeScale {
 		return this._points[index]?.time || null;
 	}
 
-	public timeToIndex(time: TimePoint, findNearest: boolean): TimePointIndex | null {
+	public timeToIndex(
+		time: TimePoint,
+		findNearest: boolean
+	): TimePointIndex | null {
 		if (this._points.length < 1) {
 			// no time points available
+			console.log("[LW]: No time points are available");
 			return null;
 		}
 
 		if (time.timestamp > this._points[this._points.length - 1].time.timestamp) {
 			// special case
-			return findNearest ? this._points.length - 1 as TimePointIndex : null;
+			return findNearest ? ((this._points.length - 1) as TimePointIndex) : null;
 		}
 
-		const index = lowerbound(this._points, time.timestamp, (a: TimeScalePoint, b: UTCTimestamp) => a.time.timestamp < b);
+		const index = lowerbound(
+			this._points,
+			time.timestamp,
+			(a: TimeScalePoint, b: UTCTimestamp) => a.time.timestamp < b
+		);
 
 		if (time.timestamp < this._points[index].time.timestamp) {
-			return findNearest ? index as TimePointIndex : null;
+			return findNearest ? (index as TimePointIndex) : null;
 		}
 
 		return index as TimePointIndex;
 	}
 
 	public isEmpty(): boolean {
-		return this._width === 0 || this._points.length === 0 || this._baseIndexOrNull === null;
+		return (
+			this._width === 0 ||
+			this._points.length === 0 ||
+			this._baseIndexOrNull === null
+		);
 	}
 
 	// strict range: integer indices of the bars in the visible range rounded in more wide direction
@@ -340,14 +366,22 @@ export class TimeScale {
 		const lastIndex = ensureNotNull(this._lastIndex());
 
 		return {
-			from: ensureNotNull(this.indexToTime(Math.max(firstIndex, from) as TimePointIndex) as TimePoint),
-			to: ensureNotNull(this.indexToTime(Math.min(lastIndex, to) as TimePointIndex) as TimePoint),
+			from: ensureNotNull(
+				this.indexToTime(
+					Math.max(firstIndex, from) as TimePointIndex
+				) as TimePoint
+			),
+			to: ensureNotNull(
+				this.indexToTime(Math.min(lastIndex, to) as TimePointIndex) as TimePoint
+			),
 		};
 	}
 
 	public logicalRangeForTimeRange(range: TimePointsRange): LogicalRange {
 		return {
-			from: ensureNotNull(this.timeToIndex(range.from, true)) as number as Logical,
+			from: ensureNotNull(
+				this.timeToIndex(range.from, true)
+			) as number as Logical,
 			to: ensureNotNull(this.timeToIndex(range.to, true)) as number as Logical,
 		};
 	}
@@ -367,7 +401,7 @@ export class TimeScale {
 
 		if (this._options.lockVisibleTimeRangeOnResize && this._width) {
 			// recalculate bar spacing
-			const newBarSpacing = this._barSpacing * width / this._width;
+			const newBarSpacing = (this._barSpacing * width) / this._width;
 			this._barSpacing = newBarSpacing;
 		}
 
@@ -404,19 +438,25 @@ export class TimeScale {
 
 		const baseIndex = this.baseIndex();
 		const deltaFromRight = baseIndex + this._rightOffset - index;
-		const coordinate = this._width - (deltaFromRight + 0.5) * this._barSpacing - 1;
+		const coordinate =
+			this._width - (deltaFromRight + 0.5) * this._barSpacing - 1;
 		return coordinate as Coordinate;
 	}
 
-	public indexesToCoordinates<T extends TimedValue>(points: T[], visibleRange?: SeriesItemsIndexesRange): void {
+	public indexesToCoordinates<T extends TimedValue>(
+		points: T[],
+		visibleRange?: SeriesItemsIndexesRange
+	): void {
 		const baseIndex = this.baseIndex();
-		const indexFrom = (visibleRange === undefined) ? 0 : visibleRange.from;
-		const indexTo = (visibleRange === undefined) ? points.length : visibleRange.to;
+		const indexFrom = visibleRange === undefined ? 0 : visibleRange.from;
+		const indexTo =
+			visibleRange === undefined ? points.length : visibleRange.to;
 
 		for (let i = indexFrom; i < indexTo; i++) {
 			const index = points[i].time;
 			const deltaFromRight = baseIndex + this._rightOffset - index;
-			const coordinate = this._width - (deltaFromRight + 0.5) * this._barSpacing - 1;
+			const coordinate =
+				this._width - (deltaFromRight + 0.5) * this._barSpacing - 1;
 			points[i].x = coordinate as Coordinate;
 		}
 	}
@@ -469,20 +509,31 @@ export class TimeScale {
 
 		const visibleBars = ensureNotNull(this.visibleStrictRange());
 
-		const firstBar = Math.max(visibleBars.left(), visibleBars.left() - indexPerLabel);
-		const lastBar = Math.max(visibleBars.right(), visibleBars.right() - indexPerLabel);
+		const firstBar = Math.max(
+			visibleBars.left(),
+			visibleBars.left() - indexPerLabel
+		);
+		const lastBar = Math.max(
+			visibleBars.right(),
+			visibleBars.right() - indexPerLabel
+		);
 
 		const items = this._tickMarks.build(spacing, maxLabelWidth);
 
 		// according to indexPerLabel value this value means "earliest index which _might be_ used as the second label on time scale"
-		const earliestIndexOfSecondLabel = (this._firstIndex() as number) + indexPerLabel;
+		const earliestIndexOfSecondLabel =
+			(this._firstIndex() as number) + indexPerLabel;
 
 		// according to indexPerLabel value this value means "earliest index which _might be_ used as the second last label on time scale"
-		const indexOfSecondLastLabel = (this._lastIndex() as number) - indexPerLabel;
+		const indexOfSecondLastLabel =
+			(this._lastIndex() as number) - indexPerLabel;
 
-		const isAllScalingAndScrollingDisabled = this._isAllScalingAndScrollingDisabled();
-		const isLeftEdgeFixed = this._options.fixLeftEdge || isAllScalingAndScrollingDisabled;
-		const isRightEdgeFixed = this._options.fixRightEdge || isAllScalingAndScrollingDisabled;
+		const isAllScalingAndScrollingDisabled =
+			this._isAllScalingAndScrollingDisabled();
+		const isLeftEdgeFixed =
+			this._options.fixLeftEdge || isAllScalingAndScrollingDisabled;
+		const isRightEdgeFixed =
+			this._options.fixRightEdge || isAllScalingAndScrollingDisabled;
 
 		let targetIndex = 0;
 		for (const tm of items) {
@@ -507,13 +558,18 @@ export class TimeScale {
 				this._labels.push(label);
 			}
 
-			if (this._barSpacing > (maxLabelWidth / 2) && !isAllScalingAndScrollingDisabled) {
+			if (
+				this._barSpacing > maxLabelWidth / 2 &&
+				!isAllScalingAndScrollingDisabled
+			) {
 				// if there is enough space then let's show all tick marks as usual
 				label.needAlignCoordinate = false;
 			} else {
 				// if a user is able to scroll after a tick mark then show it as usual, otherwise the coordinate might be aligned
 				// if the index is for the second (last) label or later (earlier) then most likely this label might be displayed without correcting the coordinate
-				label.needAlignCoordinate = (isLeftEdgeFixed && tm.index <= earliestIndexOfSecondLabel) || (isRightEdgeFixed && tm.index >= indexOfSecondLastLabel);
+				label.needAlignCoordinate =
+					(isLeftEdgeFixed && tm.index <= earliestIndexOfSecondLabel) ||
+					(isRightEdgeFixed && tm.index >= indexOfSecondLastLabel);
 			}
 
 			targetIndex++;
@@ -559,7 +615,10 @@ export class TimeScale {
 
 		if (!this._options.rightBarStaysOnScroll) {
 			// and then correct right offset to move index under zoomPoint back to its coordinate
-			this.setRightOffset(this.rightOffset() + (floatIndexAtZoomPoint - this._coordinateToFloatIndex(zoomPoint)));
+			this.setRightOffset(
+				this.rightOffset() +
+					(floatIndexAtZoomPoint - this._coordinateToFloatIndex(zoomPoint))
+			);
 		}
 	}
 
@@ -568,7 +627,10 @@ export class TimeScale {
 			this.endScroll();
 		}
 
-		if (this._scaleStartPoint !== null || this._commonTransitionStartState !== null) {
+		if (
+			this._scaleStartPoint !== null ||
+			this._commonTransitionStartState !== null
+		) {
 			return;
 		}
 
@@ -586,13 +648,18 @@ export class TimeScale {
 		}
 
 		const startLengthFromRight = clamp(this._width - x, 0, this._width);
-		const currentLengthFromRight = clamp(this._width - ensureNotNull(this._scaleStartPoint), 0, this._width);
+		const currentLengthFromRight = clamp(
+			this._width - ensureNotNull(this._scaleStartPoint),
+			0,
+			this._width
+		);
 		if (startLengthFromRight === 0 || currentLengthFromRight === 0) {
 			return;
 		}
 
 		this.setBarSpacing(
-			this._commonTransitionStartState.barSpacing * startLengthFromRight / currentLengthFromRight
+			(this._commonTransitionStartState.barSpacing * startLengthFromRight) /
+				currentLengthFromRight
 		);
 	}
 
@@ -606,7 +673,10 @@ export class TimeScale {
 	}
 
 	public startScroll(x: Coordinate): void {
-		if (this._scrollStartPoint !== null || this._commonTransitionStartState !== null) {
+		if (
+			this._scrollStartPoint !== null ||
+			this._commonTransitionStartState !== null
+		) {
 			return;
 		}
 
@@ -624,7 +694,9 @@ export class TimeScale {
 		}
 
 		const shiftInLogical = (this._scrollStartPoint - x) / this.barSpacing();
-		this._rightOffset = ensureNotNull(this._commonTransitionStartState).rightOffset + shiftInLogical;
+		this._rightOffset =
+			ensureNotNull(this._commonTransitionStartState).rightOffset +
+			shiftInLogical;
 		this._visibleRangeInvalidated = true;
 
 		// do not allow scroll out of visible bars
@@ -644,21 +716,29 @@ export class TimeScale {
 		this.scrollToOffsetAnimated(this._options.rightOffset);
 	}
 
-	public scrollToOffsetAnimated(offset: number, animationDuration: number = Constants.DefaultAnimationDuration): void {
+	public scrollToOffsetAnimated(
+		offset: number,
+		animationDuration: number = Constants.DefaultAnimationDuration
+	): void {
 		if (!isFinite(offset)) {
-			throw new RangeError('offset is required and must be finite number');
+			throw new RangeError("offset is required and must be finite number");
 		}
 
 		if (!isFinite(animationDuration) || animationDuration <= 0) {
-			throw new RangeError('animationDuration (optional) must be finite positive number');
+			throw new RangeError(
+				"animationDuration (optional) must be finite positive number"
+			);
 		}
 
 		const source = this._rightOffset;
 		const animationStart = performance.now();
 		const animationFn = () => {
-			const animationProgress = (performance.now() - animationStart) / animationDuration;
+			const animationProgress =
+				(performance.now() - animationStart) / animationDuration;
 			const finishAnimation = animationProgress >= 1;
-			const rightOffset = finishAnimation ? offset : source + (offset - source) * animationProgress;
+			const rightOffset = finishAnimation
+				? offset
+				: source + (offset - source) * animationProgress;
 			this.setRightOffset(rightOffset);
 			if (!finishAnimation) {
 				setTimeout(animationFn, 20);
@@ -668,7 +748,10 @@ export class TimeScale {
 		animationFn();
 	}
 
-	public update(newPoints: readonly TimeScalePoint[], firstChangedPointIndex: number): void {
+	public update(
+		newPoints: readonly TimeScalePoint[],
+		firstChangedPointIndex: number
+	): void {
 		this._visibleRangeInvalidated = true;
 
 		this._points = newPoints;
@@ -693,7 +776,7 @@ export class TimeScale {
 		// so in methods which should known whether it is set or not
 		// we should check field `_baseIndexOrNull` instead of getter `baseIndex()`
 		// see minRightOffset for example
-		return this._baseIndexOrNull || 0 as TimePointIndex;
+		return this._baseIndexOrNull || (0 as TimePointIndex);
 	}
 
 	public setVisibleRange(range: RangeImpl<TimePointIndex>): void {
@@ -713,7 +796,9 @@ export class TimeScale {
 			return;
 		}
 
-		this.setVisibleRange(new RangeImpl(first, last + this._options.rightOffset as TimePointIndex));
+		this.setVisibleRange(
+			new RangeImpl(first, (last + this._options.rightOffset) as TimePointIndex)
+		);
 	}
 
 	public setLogicalRange(range: LogicalRange): void {
@@ -726,7 +811,9 @@ export class TimeScale {
 
 	public formatDateTime(time: TimePoint): string {
 		if (this._localizationOptions.timeFormatter !== undefined) {
-			return this._localizationOptions.timeFormatter(time.businessDay || time.timestamp);
+			return this._localizationOptions.timeFormatter(
+				time.businessDay || time.timestamp
+			);
 		}
 
 		return this._dateTimeFormatter.format(new Date(time.timestamp * 1000));
@@ -734,22 +821,26 @@ export class TimeScale {
 
 	private _isAllScalingAndScrollingDisabled(): boolean {
 		const { handleScroll, handleScale } = this._model.options();
-		return !handleScroll.horzTouchDrag
-			&& !handleScroll.mouseWheel
-			&& !handleScroll.pressedMouseMove
-			&& !handleScroll.vertTouchDrag
-			&& !handleScale.axisDoubleClickReset
-			&& !handleScale.axisPressedMouseMove.time
-			&& !handleScale.mouseWheel
-			&& !handleScale.pinch;
+		return (
+			!handleScroll.horzTouchDrag &&
+			!handleScroll.mouseWheel &&
+			!handleScroll.pressedMouseMove &&
+			!handleScroll.vertTouchDrag &&
+			!handleScale.axisDoubleClickReset &&
+			!handleScale.axisPressedMouseMove.time &&
+			!handleScale.mouseWheel &&
+			!handleScale.pinch
+		);
 	}
 
 	private _firstIndex(): TimePointIndex | null {
-		return this._points.length === 0 ? null : 0 as TimePointIndex;
+		return this._points.length === 0 ? null : (0 as TimePointIndex);
 	}
 
 	private _lastIndex(): TimePointIndex | null {
-		return this._points.length === 0 ? null : (this._points.length - 1) as TimePointIndex;
+		return this._points.length === 0
+			? null
+			: ((this._points.length - 1) as TimePointIndex);
 	}
 
 	private _rightOffsetForCoordinate(x: Coordinate): number {
@@ -795,7 +886,10 @@ export class TimeScale {
 		const rightBorder = this._rightOffset + baseIndex;
 		const leftBorder = rightBorder - newBarsLength + 1;
 
-		const logicalRange = new RangeImpl(leftBorder as Logical, rightBorder as Logical);
+		const logicalRange = new RangeImpl(
+			leftBorder as Logical,
+			rightBorder as Logical
+		);
 		this._setVisibleRange(new TimeScaleVisibleRange(logicalRange));
 	}
 
@@ -820,7 +914,11 @@ export class TimeScale {
 	private _minBarSpacing(): number {
 		// if both options are enabled then limit bar spacing so that zooming-out is not possible
 		// if it would cause either the first or last points to move too far from an edge
-		if (this._options.fixLeftEdge && this._options.fixRightEdge && this._points.length !== 0) {
+		if (
+			this._options.fixLeftEdge &&
+			this._options.fixRightEdge &&
+			this._points.length !== 0
+		) {
 			return this._width / this._points.length;
 		}
 
@@ -861,7 +959,8 @@ export class TimeScale {
 	private _maxRightOffset(): number {
 		return this._options.fixRightEdge
 			? 0
-			: (this._width / this._barSpacing) - Math.min(Constants.MinVisibleBarsCount, this._points.length);
+			: this._width / this._barSpacing -
+					Math.min(Constants.MinVisibleBarsCount, this._points.length);
 	}
 
 	private _saveCommonTransitionsStartState(): void {
@@ -888,8 +987,15 @@ export class TimeScale {
 		return formatter.format(time);
 	}
 
-	private _formatLabelImpl(timePoint: TimePoint, weight: TickMarkWeight): string {
-		const tickMarkType = weightToTickMarkType(weight, this._options.timeVisible, this._options.secondsVisible);
+	private _formatLabelImpl(
+		timePoint: TimePoint,
+		weight: TickMarkWeight
+	): string {
+		const tickMarkType = weightToTickMarkType(
+			weight,
+			this._options.timeVisible,
+			this._options.secondsVisible
+		);
 
 		if (this._options.tickMarkFormatter !== undefined) {
 			// this is temporary solution to make more consistency API
@@ -899,21 +1005,39 @@ export class TimeScale {
 			// in other hand, type guards couldn't be declared on model level so far
 			// because they are know about string representation of business day ¯\_(ツ)_/¯
 			// let's fix in for all cases for the whole API
-			return this._options.tickMarkFormatter(timePoint.businessDay ?? timePoint.timestamp, tickMarkType, this._localizationOptions.locale);
+			return this._options.tickMarkFormatter(
+				timePoint.businessDay ?? timePoint.timestamp,
+				tickMarkType,
+				this._localizationOptions.locale
+			);
 		}
 
-		return defaultTickMarkFormatter(timePoint, tickMarkType, this._localizationOptions.locale);
+		return defaultTickMarkFormatter(
+			timePoint,
+			tickMarkType,
+			this._localizationOptions.locale
+		);
 	}
 
 	private _setVisibleRange(newVisibleRange: TimeScaleVisibleRange): void {
 		const oldVisibleRange = this._visibleRange;
 		this._visibleRange = newVisibleRange;
 
-		if (!areRangesEqual(oldVisibleRange.strictRange(), this._visibleRange.strictRange())) {
+		if (
+			!areRangesEqual(
+				oldVisibleRange.strictRange(),
+				this._visibleRange.strictRange()
+			)
+		) {
 			this._visibleBarsChanged.fire();
 		}
 
-		if (!areRangesEqual(oldVisibleRange.logicalRange(), this._visibleRange.logicalRange())) {
+		if (
+			!areRangesEqual(
+				oldVisibleRange.logicalRange(),
+				this._visibleRange.logicalRange()
+			)
+		) {
 			this._logicalRangeChanged.fire();
 		}
 
@@ -936,12 +1060,15 @@ export class TimeScale {
 		if (this._options.timeVisible) {
 			this._dateTimeFormatter = new DateTimeFormatter({
 				dateFormat: dateFormat,
-				timeFormat: this._options.secondsVisible ? '%h:%m:%s' : '%h:%m',
-				dateTimeSeparator: '   ',
+				timeFormat: this._options.secondsVisible ? "%h:%m:%s" : "%h:%m",
+				dateTimeSeparator: "   ",
 				locale: this._localizationOptions.locale,
 			});
 		} else {
-			this._dateTimeFormatter = new DateFormatter(dateFormat, this._localizationOptions.locale);
+			this._dateTimeFormatter = new DateFormatter(
+				dateFormat,
+				this._localizationOptions.locale
+			);
 		}
 	}
 
@@ -977,12 +1104,18 @@ export class TimeScale {
 }
 
 // eslint-disable-next-line complexity
-function weightToTickMarkType(weight: TickMarkWeight, timeVisible: boolean, secondsVisible: boolean): TickMarkType {
+function weightToTickMarkType(
+	weight: TickMarkWeight,
+	timeVisible: boolean,
+	secondsVisible: boolean
+): TickMarkType {
 	switch (weight) {
 		case TickMarkWeight.LessThanSecond:
 		case TickMarkWeight.Second:
 			return timeVisible
-				? (secondsVisible ? TickMarkType.TimeWithSeconds : TickMarkType.Time)
+				? secondsVisible
+					? TickMarkType.TimeWithSeconds
+					: TickMarkType.Time
 				: TickMarkType.DayOfMonth;
 
 		case TickMarkWeight.Minute1:
