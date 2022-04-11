@@ -1,10 +1,10 @@
-import { ISubscription } from '../helpers/isubscription';
-import { DeepPartial } from '../helpers/strict-type-checks';
-import { ChartModel } from './chart-model';
-import { Coordinate } from './coordinate';
-import { LocalizationOptions } from './localization-options';
-import { RangeImpl } from './range-impl';
-import { BusinessDay, Logical, LogicalRange, SeriesItemsIndexesRange, TickMarkWeight, TimedValue, TimePoint, TimePointIndex, TimePointsRange, TimeScalePoint, UTCTimestamp } from './time-data';
+import { ISubscription } from "../helpers/isubscription";
+import { DeepPartial } from "../helpers/strict-type-checks";
+import { ChartModel } from "./chart-model";
+import { Coordinate } from "./coordinate";
+import { LocalizationOptions } from "./localization-options";
+import { RangeImpl } from "./range-impl";
+import { BusinessDay, Logical, LogicalRange, SeriesItemsIndexesRange, TickMarkWeight, TimedValue, TimePoint, TimePointIndex, TimePointsRange, TimeScalePoint, UTCTimestamp } from "./time-data";
 export interface TimeMark {
     needAlignCoordinate: boolean;
     coord: number;

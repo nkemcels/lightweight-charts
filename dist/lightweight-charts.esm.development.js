@@ -1,6 +1,6 @@
 /*!
  * @license
- * TradingView Lightweight Charts v3.8.0-dev+202204050742
+ * TradingView Lightweight Charts v3.8.0-dev+202204110845
  * Copyright (c) 2020 TradingView, Inc.
  * Licensed under Apache License 2.0 https://www.apache.org/licenses/LICENSE-2.0
  */
@@ -6384,11 +6384,12 @@ var TimeScale = /** @class */ (function () {
     TimeScale.prototype._internal_timeToIndex = function (time, findNearest) {
         if (this._private__points.length < 1) {
             // no time points available
+            console.log("[LW]: No time points are available");
             return null;
         }
         if (time._internal_timestamp > this._private__points[this._private__points.length - 1]._internal_time._internal_timestamp) {
             // special case
-            return findNearest ? this._private__points.length - 1 : null;
+            return findNearest ? (this._private__points.length - 1) : null;
         }
         var index = lowerbound(this._private__points, time._internal_timestamp, function (a, b) { return a._internal_time._internal_timestamp < b; });
         if (time._internal_timestamp < this._private__points[index]._internal_time._internal_timestamp) {
@@ -6397,7 +6398,9 @@ var TimeScale = /** @class */ (function () {
         return index;
     };
     TimeScale.prototype._internal_isEmpty = function () {
-        return this._private__width === 0 || this._private__points.length === 0 || this._private__baseIndexOrNull === null;
+        return (this._private__width === 0 ||
+            this._private__points.length === 0 ||
+            this._private__baseIndexOrNull === null);
     };
     // strict range: integer indices of the bars in the visible range rounded in more wide direction
     TimeScale.prototype._internal_visibleStrictRange = function () {
@@ -6447,7 +6450,7 @@ var TimeScale = /** @class */ (function () {
         }
         if (this._private__options.lockVisibleTimeRangeOnResize && this._private__width) {
             // recalculate bar spacing
-            var newBarSpacing = this._private__barSpacing * width / this._private__width;
+            var newBarSpacing = (this._private__barSpacing * width) / this._private__width;
             this._private__barSpacing = newBarSpacing;
         }
         // if time scale is scrolled to the end of data and we have fixed right edge
@@ -6484,8 +6487,8 @@ var TimeScale = /** @class */ (function () {
     };
     TimeScale.prototype._internal_indexesToCoordinates = function (points, visibleRange) {
         var baseIndex = this._internal_baseIndex();
-        var indexFrom = (visibleRange === undefined) ? 0 : visibleRange.from;
-        var indexTo = (visibleRange === undefined) ? points.length : visibleRange.to;
+        var indexFrom = visibleRange === undefined ? 0 : visibleRange.from;
+        var indexTo = visibleRange === undefined ? points.length : visibleRange.to;
         for (var i = indexFrom; i < indexTo; i++) {
             var index = points[i]._internal_time;
             var deltaFromRight = baseIndex + this._private__rightOffset - index;
@@ -6561,14 +6564,17 @@ var TimeScale = /** @class */ (function () {
                 };
                 this._private__labels.push(label);
             }
-            if (this._private__barSpacing > (maxLabelWidth / 2) && !isAllScalingAndScrollingDisabled) {
+            if (this._private__barSpacing > maxLabelWidth / 2 &&
+                !isAllScalingAndScrollingDisabled) {
                 // if there is enough space then let's show all tick marks as usual
                 label._internal_needAlignCoordinate = false;
             }
             else {
                 // if a user is able to scroll after a tick mark then show it as usual, otherwise the coordinate might be aligned
                 // if the index is for the second (last) label or later (earlier) then most likely this label might be displayed without correcting the coordinate
-                label._internal_needAlignCoordinate = (isLeftEdgeFixed && tm._internal_index <= earliestIndexOfSecondLabel) || (isRightEdgeFixed && tm._internal_index >= indexOfSecondLastLabel);
+                label._internal_needAlignCoordinate =
+                    (isLeftEdgeFixed && tm._internal_index <= earliestIndexOfSecondLabel) ||
+                        (isRightEdgeFixed && tm._internal_index >= indexOfSecondLastLabel);
             }
             targetIndex++;
         }
@@ -6603,14 +6609,16 @@ var TimeScale = /** @class */ (function () {
         this._internal_setBarSpacing(newBarSpacing);
         if (!this._private__options.rightBarStaysOnScroll) {
             // and then correct right offset to move index under zoomPoint back to its coordinate
-            this._internal_setRightOffset(this._internal_rightOffset() + (floatIndexAtZoomPoint - this._private__coordinateToFloatIndex(zoomPoint)));
+            this._internal_setRightOffset(this._internal_rightOffset() +
+                (floatIndexAtZoomPoint - this._private__coordinateToFloatIndex(zoomPoint)));
         }
     };
     TimeScale.prototype._internal_startScale = function (x) {
         if (this._private__scrollStartPoint) {
             this._internal_endScroll();
         }
-        if (this._private__scaleStartPoint !== null || this._private__commonTransitionStartState !== null) {
+        if (this._private__scaleStartPoint !== null ||
+            this._private__commonTransitionStartState !== null) {
             return;
         }
         if (this._internal_isEmpty()) {
@@ -6628,7 +6636,8 @@ var TimeScale = /** @class */ (function () {
         if (startLengthFromRight === 0 || currentLengthFromRight === 0) {
             return;
         }
-        this._internal_setBarSpacing(this._private__commonTransitionStartState._internal_barSpacing * startLengthFromRight / currentLengthFromRight);
+        this._internal_setBarSpacing((this._private__commonTransitionStartState._internal_barSpacing * startLengthFromRight) /
+            currentLengthFromRight);
     };
     TimeScale.prototype._internal_endScale = function () {
         if (this._private__scaleStartPoint === null) {
@@ -6638,7 +6647,8 @@ var TimeScale = /** @class */ (function () {
         this._private__clearCommonTransitionsStartState();
     };
     TimeScale.prototype._internal_startScroll = function (x) {
-        if (this._private__scrollStartPoint !== null || this._private__commonTransitionStartState !== null) {
+        if (this._private__scrollStartPoint !== null ||
+            this._private__commonTransitionStartState !== null) {
             return;
         }
         if (this._internal_isEmpty()) {
@@ -6652,7 +6662,9 @@ var TimeScale = /** @class */ (function () {
             return;
         }
         var shiftInLogical = (this._private__scrollStartPoint - x) / this._internal_barSpacing();
-        this._private__rightOffset = ensureNotNull(this._private__commonTransitionStartState)._internal_rightOffset + shiftInLogical;
+        this._private__rightOffset =
+            ensureNotNull(this._private__commonTransitionStartState)._internal_rightOffset +
+                shiftInLogical;
         this._private__visibleRangeInvalidated = true;
         // do not allow scroll out of visible bars
         this._private__correctOffset();
@@ -6671,17 +6683,19 @@ var TimeScale = /** @class */ (function () {
         var _this = this;
         if (animationDuration === void 0) { animationDuration = 400 /* DefaultAnimationDuration */; }
         if (!isFinite(offset)) {
-            throw new RangeError('offset is required and must be finite number');
+            throw new RangeError("offset is required and must be finite number");
         }
         if (!isFinite(animationDuration) || animationDuration <= 0) {
-            throw new RangeError('animationDuration (optional) must be finite positive number');
+            throw new RangeError("animationDuration (optional) must be finite positive number");
         }
         var source = this._private__rightOffset;
         var animationStart = performance.now();
         var animationFn = function () {
             var animationProgress = (performance.now() - animationStart) / animationDuration;
             var finishAnimation = animationProgress >= 1;
-            var rightOffset = finishAnimation ? offset : source + (offset - source) * animationProgress;
+            var rightOffset = finishAnimation
+                ? offset
+                : source + (offset - source) * animationProgress;
             _this._internal_setRightOffset(rightOffset);
             if (!finishAnimation) {
                 setTimeout(animationFn, 20);
@@ -6726,7 +6740,7 @@ var TimeScale = /** @class */ (function () {
         if (first === null || last === null) {
             return;
         }
-        this._internal_setVisibleRange(new RangeImpl(first, last + this._private__options.rightOffset));
+        this._internal_setVisibleRange(new RangeImpl(first, (last + this._private__options.rightOffset)));
     };
     TimeScale.prototype._internal_setLogicalRange = function (range) {
         var barRange = new RangeImpl(range.from, range.to);
@@ -6740,20 +6754,22 @@ var TimeScale = /** @class */ (function () {
     };
     TimeScale.prototype._private__isAllScalingAndScrollingDisabled = function () {
         var _a = this._private__model._internal_options(), handleScroll = _a.handleScroll, handleScale = _a.handleScale;
-        return !handleScroll.horzTouchDrag
-            && !handleScroll.mouseWheel
-            && !handleScroll.pressedMouseMove
-            && !handleScroll.vertTouchDrag
-            && !handleScale.axisDoubleClickReset
-            && !handleScale.axisPressedMouseMove.time
-            && !handleScale.mouseWheel
-            && !handleScale.pinch;
+        return (!handleScroll.horzTouchDrag &&
+            !handleScroll.mouseWheel &&
+            !handleScroll.pressedMouseMove &&
+            !handleScroll.vertTouchDrag &&
+            !handleScale.axisDoubleClickReset &&
+            !handleScale.axisPressedMouseMove.time &&
+            !handleScale.mouseWheel &&
+            !handleScale.pinch);
     };
     TimeScale.prototype._private__firstIndex = function () {
         return this._private__points.length === 0 ? null : 0;
     };
     TimeScale.prototype._private__lastIndex = function () {
-        return this._private__points.length === 0 ? null : (this._private__points.length - 1);
+        return this._private__points.length === 0
+            ? null
+            : (this._private__points.length - 1);
     };
     TimeScale.prototype._private__rightOffsetForCoordinate = function (x) {
         return (this._private__width - 1 - x) / this._private__barSpacing;
@@ -6810,7 +6826,9 @@ var TimeScale = /** @class */ (function () {
     TimeScale.prototype._private__minBarSpacing = function () {
         // if both options are enabled then limit bar spacing so that zooming-out is not possible
         // if it would cause either the first or last points to move too far from an edge
-        if (this._private__options.fixLeftEdge && this._private__options.fixRightEdge && this._private__points.length !== 0) {
+        if (this._private__options.fixLeftEdge &&
+            this._private__options.fixRightEdge &&
+            this._private__points.length !== 0) {
             return this._private__width / this._private__points.length;
         }
         return this._private__options.minBarSpacing;
@@ -6843,7 +6861,8 @@ var TimeScale = /** @class */ (function () {
     TimeScale.prototype._private__maxRightOffset = function () {
         return this._private__options.fixRightEdge
             ? 0
-            : (this._private__width / this._private__barSpacing) - Math.min(2 /* MinVisibleBarsCount */, this._private__points.length);
+            : this._private__width / this._private__barSpacing -
+                Math.min(2 /* MinVisibleBarsCount */, this._private__points.length);
     };
     TimeScale.prototype._private__saveCommonTransitionsStartState = function () {
         this._private__commonTransitionStartState = {
@@ -6904,8 +6923,8 @@ var TimeScale = /** @class */ (function () {
         if (this._private__options.timeVisible) {
             this._private__dateTimeFormatter = new DateTimeFormatter({
                 _internal_dateFormat: dateFormat,
-                _internal_timeFormat: this._private__options.secondsVisible ? '%h:%m:%s' : '%h:%m',
-                _internal_dateTimeSeparator: '   ',
+                _internal_timeFormat: this._private__options.secondsVisible ? "%h:%m:%s" : "%h:%m",
+                _internal_dateTimeSeparator: "   ",
                 _internal_locale: this._private__localizationOptions.locale,
             });
         }
@@ -6944,7 +6963,9 @@ function weightToTickMarkType(weight, timeVisible, secondsVisible) {
         case 0 /* LessThanSecond */:
         case 10 /* Second */:
             return timeVisible
-                ? (secondsVisible ? 4 /* TimeWithSeconds */ : 3 /* Time */)
+                ? secondsVisible
+                    ? 4 /* TimeWithSeconds */
+                    : 3 /* Time */
                 : 2 /* DayOfMonth */;
         case 20 /* Minute1 */:
         case 21 /* Minute5 */:
@@ -11786,7 +11807,7 @@ var TimeScaleApi = /** @class */ (function () {
         };
     };
     TimeScaleApi.prototype.setVisibleLogicalRange = function (range) {
-        assert(range.from <= range.to, 'The from index cannot be after the to index.');
+        assert(range.from <= range.to, "The from index cannot be after the to index.");
         this._private__model._internal_setTargetLogicalRange(range);
     };
     TimeScaleApi.prototype.resetTimeScale = function () {
@@ -11812,9 +11833,10 @@ var TimeScaleApi = /** @class */ (function () {
             return this._private__timeScale._internal_coordinateToIndex(x);
         }
     };
-    TimeScaleApi.prototype.timeToCoordinate = function (time) {
+    TimeScaleApi.prototype.timeToCoordinate = function (time, findNearest) {
+        if (findNearest === void 0) { findNearest = false; }
         var timePoint = convertTime(time);
-        var timePointIndex = this._private__timeScale._internal_timeToIndex(timePoint, false);
+        var timePointIndex = this._private__timeScale._internal_timeToIndex(timePoint, findNearest);
         if (timePointIndex === null) {
             return null;
         }
@@ -12182,7 +12204,7 @@ function createChart(container, options) {
  * Returns the current version as a string. For example `'3.3.0'`.
  */
 function version() {
-    return "3.8.0-dev+202204050742";
+    return "3.8.0-dev+202204110845";
 }
 
 export { ColorType, CrosshairMode, LastPriceAnimationMode as LasPriceAnimationMode, LastPriceAnimationMode, LineStyle, LineType, PriceLineSource, PriceScaleMode, TickMarkType, TrackingModeExitMode, createChart, isBusinessDay, isUTCTimestamp, version };

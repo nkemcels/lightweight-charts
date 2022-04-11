@@ -1,12 +1,12 @@
-import { TimeAxisWidget } from '../gui/time-axis-widget';
-import { IDestroyable } from '../helpers/idestroyable';
-import { DeepPartial } from '../helpers/strict-type-checks';
-import { ChartModel } from '../model/chart-model';
-import { Coordinate } from '../model/coordinate';
-import { Logical, LogicalRange, Range } from '../model/time-data';
-import { TimeScaleOptions } from '../model/time-scale';
-import { Time } from './data-consumer';
-import { ITimeScaleApi, LogicalRangeChangeEventHandler, SizeChangeEventHandler, TimeRange, TimeRangeChangeEventHandler } from './itime-scale-api';
+import { TimeAxisWidget } from "../gui/time-axis-widget";
+import { IDestroyable } from "../helpers/idestroyable";
+import { DeepPartial } from "../helpers/strict-type-checks";
+import { ChartModel } from "../model/chart-model";
+import { Coordinate } from "../model/coordinate";
+import { Logical, LogicalRange, Range } from "../model/time-data";
+import { TimeScaleOptions } from "../model/time-scale";
+import { Time } from "./data-consumer";
+import { ITimeScaleApi, LogicalRangeChangeEventHandler, SizeChangeEventHandler, TimeRange, TimeRangeChangeEventHandler } from "./itime-scale-api";
 export declare class TimeScaleApi implements ITimeScaleApi, IDestroyable {
     private _model;
     private _timeScale;
@@ -27,7 +27,7 @@ export declare class TimeScaleApi implements ITimeScaleApi, IDestroyable {
     fitContent(): void;
     logicalToCoordinate(logical: Logical): Coordinate | null;
     coordinateToLogical(x: number): Logical | null;
-    timeToCoordinate(time: Time): Coordinate | null;
+    timeToCoordinate(time: Time, findNearest?: boolean): Coordinate | null;
     coordinateToTime(x: number): Time | null;
     width(): number;
     height(): number;

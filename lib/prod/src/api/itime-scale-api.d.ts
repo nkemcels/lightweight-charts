@@ -1,8 +1,8 @@
-import { DeepPartial } from '../helpers/strict-type-checks';
-import { Coordinate } from '../model/coordinate';
-import { Logical, LogicalRange, Range } from '../model/time-data';
-import { TimeScaleOptions } from '../model/time-scale';
-import { Time } from './data-consumer';
+import { DeepPartial } from "../helpers/strict-type-checks";
+import { Coordinate } from "../model/coordinate";
+import { Logical, LogicalRange, Range } from "../model/time-data";
+import { TimeScaleOptions } from "../model/time-scale";
+import { Time } from "./data-consumer";
 /**
  * Represents a {@link Time} range.
  */
@@ -107,7 +107,7 @@ export interface ITimeScaleApi {
      * @param time - Time needs to be converted
      * @returns X coordinate of that time or `null` if no time found on time scale
      */
-    timeToCoordinate(time: Time): Coordinate | null;
+    timeToCoordinate(time: Time, findNearest?: boolean): Coordinate | null;
     /**
      * Converts a coordinate to time.
      *
