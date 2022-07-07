@@ -595,12 +595,17 @@ export class PaneWidget implements IDestroyable, MouseEventHandlers {
 		}
 	}
 	private _setCrosshairPositionNoFire(x: Coordinate, y: Coordinate): void {
-		this._model().setAndSaveCurrentPositionFire(
-			this._correctXCoord(x),
-			this._correctYCoord(y),
-			false,
-			ensureNotNull(this._state)
-		);
+		try {
+			this._model().setAndSaveCurrentPositionFire(
+				this._correctXCoord(x),
+				this._correctYCoord(y),
+				false,
+				ensureNotNull(this._state)
+			);
+		} catch (error) {
+			// eslint-disable-next-line
+			console.log("INTERNAL ERROR ", error);
+		}
 	}
 
 	private _onStateDestroyed(): void {

@@ -1,6 +1,6 @@
 /*!
  * @license
- * TradingView Lightweight Charts v3.8.0
+ * TradingView Lightweight Charts v3.8.0-dev+202207071312
  * Copyright (c) 2020 TradingView, Inc.
  * Licensed under Apache License 2.0 https://www.apache.org/licenses/LICENSE-2.0
  */
@@ -9521,7 +9521,13 @@ var PaneWidget = /** @class */ (function () {
         }
     };
     PaneWidget.prototype._private__setCrosshairPositionNoFire = function (x, y) {
-        this._private__model()._internal_setAndSaveCurrentPositionFire(this._private__correctXCoord(x), this._private__correctYCoord(y), false, ensureNotNull(this._private__state));
+        try {
+            this._private__model()._internal_setAndSaveCurrentPositionFire(this._private__correctXCoord(x), this._private__correctYCoord(y), false, ensureNotNull(this._private__state));
+        }
+        catch (error) {
+            // eslint-disable-next-line
+            console.log("INTERNAL ERROR ", error);
+        }
     };
     PaneWidget.prototype._private__onStateDestroyed = function () {
         if (this._private__state !== null) {
@@ -12203,7 +12209,7 @@ function createChart(container, options) {
  * Returns the current version as a string. For example `'3.3.0'`.
  */
 function version() {
-    return "3.8.0";
+    return "3.8.0-dev+202207071312";
 }
 
 export { ColorType, CrosshairMode, LastPriceAnimationMode as LasPriceAnimationMode, LastPriceAnimationMode, LineStyle, LineType, PriceLineSource, PriceScaleMode, TickMarkType, TrackingModeExitMode, createChart, isBusinessDay, isUTCTimestamp, version };
