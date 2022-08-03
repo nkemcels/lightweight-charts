@@ -297,6 +297,7 @@ export class Pane implements IDestroyable {
 	}
 
 	public resetPriceScale(priceScale: PriceScale): void {
+		console.log("[LW]: RESETTING PRICE SCALE HERE...");
 		const visibleBars = this._timeScale.visibleStrictRange();
 		priceScale.setMode({ autoScale: true });
 		if (visibleBars !== null) {

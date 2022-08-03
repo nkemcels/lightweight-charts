@@ -1,6 +1,6 @@
 /*!
  * @license
- * TradingView Lightweight Charts v3.8.0-dev+202208031702
+ * TradingView Lightweight Charts v3.8.0-dev+202208031723
  * Copyright (c) 2020 TradingView, Inc.
  * Licensed under Apache License 2.0 https://www.apache.org/licenses/LICENSE-2.0
  */
@@ -5638,11 +5638,11 @@
             if (priceRange !== null) {
                 // keep current range is new is empty
                 if (priceRange._internal_minValue() === priceRange._internal_maxValue()) {
-                    // const formatterSource = this._formatterSource();
-                    // const minMove = formatterSource === null || this.isPercentage() || this.isIndexedTo100() ? 1 : formatterSource.minMove();
+                    var formatterSource = this._private__formatterSource();
+                    var minMove = formatterSource === null || this._internal_isPercentage() || this._internal_isIndexedTo100() ? 1 : formatterSource._internal_minMove();
                     // if price range is degenerated to 1 point let's extend it by 10 min move values
                     // to avoid incorrect range and empty (blank) scale (in case of min tick much greater than 1)
-                    var extendValue = 0; //5 * minMove;
+                    var extendValue = 5 * minMove;
                     if (this._internal_isLog()) {
                         priceRange = convertPriceRangeFromLog(priceRange, this._private__logFormula);
                     }
@@ -5920,6 +5920,7 @@
             this._private__recalculatePriceScaleImpl(priceScale);
         };
         Pane.prototype._internal_resetPriceScale = function (priceScale) {
+            console.log("[LW]: RESETTING PRICE SCALE HERE...");
             var visibleBars = this._private__timeScale._internal_visibleStrictRange();
             priceScale._internal_setMode({ _internal_autoScale: true });
             if (visibleBars !== null) {
@@ -12332,7 +12333,7 @@
      * Returns the current version as a string. For example `'3.3.0'`.
      */
     function version() {
-        return "3.8.0-dev+202208031702";
+        return "3.8.0-dev+202208031723";
     }
 
     var LightweightChartsModule = /*#__PURE__*/Object.freeze({
