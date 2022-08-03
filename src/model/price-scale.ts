@@ -237,7 +237,6 @@ export class PriceScale {
 		this._layoutOptions = layoutOptions;
 		this._localizationOptions = localizationOptions;
 		this._markBuilder = new PriceTickMarkBuilder(this, 100, this._coordinateToLogical.bind(this), this._logicalToCoordinate.bind(this));
-		console.log("[LW]: PRICE SCALE INSTANCIATED : ",id,": ", options)
 	}
 
 	public id(): string {
@@ -249,6 +248,7 @@ export class PriceScale {
 	}
 
 	public applyOptions(options: DeepPartial<PriceScaleOptions>): void {
+		console.log("[LW]: OPTIONS CHANGED: ", options)
 		merge(this._options, options);
 		this.updateFormatter();
 
@@ -275,6 +275,7 @@ export class PriceScale {
 			this._invalidateInternalHeightCache();
 			this._marksCache = null;
 		}
+		console.log("[LW]: NEW OPTIONS: ", this._options);
 	}
 
 	public isAutoScale(): boolean {
