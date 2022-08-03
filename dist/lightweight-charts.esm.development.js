@@ -1,6 +1,6 @@
 /*!
  * @license
- * TradingView Lightweight Charts v3.8.0-dev+202208031558
+ * TradingView Lightweight Charts v3.8.0-dev+202208031610
  * Copyright (c) 2020 TradingView, Inc.
  * Licensed under Apache License 2.0 https://www.apache.org/licenses/LICENSE-2.0
  */
@@ -5053,7 +5053,6 @@ var PriceScale = /** @class */ (function () {
         this._private__layoutOptions = layoutOptions;
         this._private__localizationOptions = localizationOptions;
         this._private__markBuilder = new PriceTickMarkBuilder(this, 100, this._private__coordinateToLogical.bind(this), this._private__logicalToCoordinate.bind(this));
-        console.log("[LW]: PRICE SCALE INSTANCIATED : ", id, ": ", options);
     }
     PriceScale.prototype._internal_id = function () {
         return this._private__id;
@@ -5062,6 +5061,7 @@ var PriceScale = /** @class */ (function () {
         return this._private__options;
     };
     PriceScale.prototype._internal_applyOptions = function (options) {
+        console.log("[LW]: OPTIONS CHANGED: ", options);
         merge(this._private__options, options);
         this._internal_updateFormatter();
         if (options.mode !== undefined) {
@@ -5082,6 +5082,7 @@ var PriceScale = /** @class */ (function () {
             this._private__invalidateInternalHeightCache();
             this._private__marksCache = null;
         }
+        console.log("[LW]: NEW OPTIONS: ", this._private__options);
     };
     PriceScale.prototype._internal_isAutoScale = function () {
         return this._private__options.autoScale;
@@ -12214,7 +12215,7 @@ function createChart(container, options) {
  * Returns the current version as a string. For example `'3.3.0'`.
  */
 function version() {
-    return "3.8.0-dev+202208031558";
+    return "3.8.0-dev+202208031610";
 }
 
 export { ColorType, CrosshairMode, LastPriceAnimationMode as LasPriceAnimationMode, LastPriceAnimationMode, LineStyle, LineType, PriceLineSource, PriceScaleMode, TickMarkType, TrackingModeExitMode, createChart, isBusinessDay, isUTCTimestamp, version };
