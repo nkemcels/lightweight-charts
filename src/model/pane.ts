@@ -286,9 +286,12 @@ export class Pane implements IDestroyable {
 	}
 
 	public recalculatePriceScale(priceScale: PriceScale | null): void {
+		console.log("[LW]: TO RECALCULATE PRICE SCALE ", priceScale, " OPTIONS ", priceScale?.options());
 		if (priceScale === null || !priceScale.isAutoScale()) {
+			console.log("[LW]: SKIPPING BECAUSE IT'S AUTOSCALE FALSE...");
 			return;
 		}
+		console.log("[LW]: NOT SKIPPING BRO...");
 
 		this._recalculatePriceScaleImpl(priceScale);
 	}

@@ -1,6 +1,6 @@
 /*!
  * @license
- * TradingView Lightweight Charts v3.8.0-dev+202207071312
+ * TradingView Lightweight Charts v3.8.0-dev+202208031538
  * Copyright (c) 2020 TradingView, Inc.
  * Licensed under Apache License 2.0 https://www.apache.org/licenses/LICENSE-2.0
  */
@@ -5901,9 +5901,12 @@ var Pane = /** @class */ (function () {
         return priceScale;
     };
     Pane.prototype._internal_recalculatePriceScale = function (priceScale) {
+        console.log("[LW]: TO RECALCULATE PRICE SCALE ", priceScale, " OPTIONS ", priceScale === null || priceScale === void 0 ? void 0 : priceScale._internal_options());
         if (priceScale === null || !priceScale._internal_isAutoScale()) {
+            console.log("[LW]: SKIPPING BECAUSE IT'S AUTOSCALE FALSE...");
             return;
         }
+        console.log("[LW]: NOT SKIPPING BRO...");
         this._private__recalculatePriceScaleImpl(priceScale);
     };
     Pane.prototype._internal_resetPriceScale = function (priceScale) {
@@ -12209,7 +12212,7 @@ function createChart(container, options) {
  * Returns the current version as a string. For example `'3.3.0'`.
  */
 function version() {
-    return "3.8.0-dev+202207071312";
+    return "3.8.0-dev+202208031538";
 }
 
 export { ColorType, CrosshairMode, LastPriceAnimationMode as LasPriceAnimationMode, LastPriceAnimationMode, LineStyle, LineType, PriceLineSource, PriceScaleMode, TickMarkType, TrackingModeExitMode, createChart, isBusinessDay, isUTCTimestamp, version };
