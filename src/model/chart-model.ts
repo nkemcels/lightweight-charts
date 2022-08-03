@@ -528,6 +528,7 @@ export class ChartModel implements IDestroyable {
 	}
 
 	public createPane(index?: number): Pane {
+		console.log("[LW]: CREATING A NEW PANE...");
 		const pane = new Pane(this._timeScale, this);
 
 		if (index !== undefined) {
