@@ -1,6 +1,6 @@
 /*!
  * @license
- * TradingView Lightweight Charts v3.8.0-dev+202208031634
+ * TradingView Lightweight Charts v3.8.0-dev+202208031646
  * Copyright (c) 2020 TradingView, Inc.
  * Licensed under Apache License 2.0 https://www.apache.org/licenses/LICENSE-2.0
  */
@@ -1502,6 +1502,7 @@
         if (beforeValue === undefined) {
             return newValue;
         }
+        console.log("[LW] MERGING PANE INVALIDATION. ==> BEFORE ", beforeValue, " AND ==> NEWVAL ", newValue);
         var level = Math.max(beforeValue._internal_level, newValue._internal_level);
         var autoScale = beforeValue._internal_autoScale || newValue._internal_autoScale;
         return { _internal_level: level, _internal_autoScale: autoScale };
@@ -12331,7 +12332,7 @@
      * Returns the current version as a string. For example `'3.3.0'`.
      */
     function version() {
-        return "3.8.0-dev+202208031634";
+        return "3.8.0-dev+202208031646";
     }
 
     var LightweightChartsModule = /*#__PURE__*/Object.freeze({

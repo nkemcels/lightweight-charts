@@ -16,6 +16,7 @@ function mergePaneInvalidation(beforeValue: PaneInvalidation | undefined, newVal
 	if (beforeValue === undefined) {
 		return newValue;
 	}
+	console.log("[LW] MERGING PANE INVALIDATION. ==> BEFORE ", beforeValue, " AND ==> NEWVAL ", newValue);
 	const level = Math.max(beforeValue.level, newValue.level);
 	const autoScale = beforeValue.autoScale || newValue.autoScale;
 	return { level, autoScale };
