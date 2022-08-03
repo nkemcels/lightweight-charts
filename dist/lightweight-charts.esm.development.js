@@ -1,6 +1,6 @@
 /*!
  * @license
- * TradingView Lightweight Charts v3.8.0-dev+202208031610
+ * TradingView Lightweight Charts v3.8.0-dev+202208031625
  * Copyright (c) 2020 TradingView, Inc.
  * Licensed under Apache License 2.0 https://www.apache.org/licenses/LICENSE-2.0
  */
@@ -5105,14 +5105,17 @@ var PriceScale = /** @class */ (function () {
     };
     // eslint-disable-next-line complexity
     PriceScale.prototype._internal_setMode = function (newMode) {
+        console.log("[LW]: SET-MODE CALLED");
         var oldMode = this._internal_mode();
         var priceRange = null;
         if (newMode._internal_autoScale !== undefined) {
+            console.log("[LW]: SUSPECT 1");
             this._private__options.autoScale = newMode._internal_autoScale;
         }
         if (newMode._internal_mode !== undefined) {
             this._private__options.mode = newMode._internal_mode;
             if (newMode._internal_mode === 2 /* Percentage */ || newMode._internal_mode === 3 /* IndexedTo100 */) {
+                console.log("[LW]: SUSPECT 2");
                 this._private__options.autoScale = true;
             }
             // TODO: Remove after making rebuildTickMarks lazy
@@ -5120,13 +5123,16 @@ var PriceScale = /** @class */ (function () {
         }
         // define which scale converted from
         if (oldMode._internal_mode === 1 /* Logarithmic */ && newMode._internal_mode !== oldMode._internal_mode) {
+            console.log("[LW]: PROBABLY SUSPECT 3");
             if (canConvertPriceRangeFromLog(this._private__priceRange, this._private__logFormula)) {
+                console.log("[LW]: SUSPECT 3 FAILED");
                 priceRange = convertPriceRangeFromLog(this._private__priceRange, this._private__logFormula);
                 if (priceRange !== null) {
                     this._internal_setPriceRange(priceRange);
                 }
             }
             else {
+                console.log("[LW]: SUSPECT 3");
                 this._private__options.autoScale = true;
             }
         }
@@ -12215,7 +12221,7 @@ function createChart(container, options) {
  * Returns the current version as a string. For example `'3.3.0'`.
  */
 function version() {
-    return "3.8.0-dev+202208031610";
+    return "3.8.0-dev+202208031625";
 }
 
 export { ColorType, CrosshairMode, LastPriceAnimationMode as LasPriceAnimationMode, LastPriceAnimationMode, LineStyle, LineType, PriceLineSource, PriceScaleMode, TickMarkType, TrackingModeExitMode, createChart, isBusinessDay, isUTCTimestamp, version };
