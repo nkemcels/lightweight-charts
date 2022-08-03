@@ -237,6 +237,7 @@ export class PriceScale {
 		this._layoutOptions = layoutOptions;
 		this._localizationOptions = localizationOptions;
 		this._markBuilder = new PriceTickMarkBuilder(this, 100, this._coordinateToLogical.bind(this), this._logicalToCoordinate.bind(this));
+		console.log("[LW]: PRICE SCALE INSTANCIATED : ",id,": ", options)
 	}
 
 	public id(): string {

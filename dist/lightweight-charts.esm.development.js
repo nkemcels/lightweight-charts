@@ -1,6 +1,6 @@
 /*!
  * @license
- * TradingView Lightweight Charts v3.8.0-dev+202208031538
+ * TradingView Lightweight Charts v3.8.0-dev+202208031558
  * Copyright (c) 2020 TradingView, Inc.
  * Licensed under Apache License 2.0 https://www.apache.org/licenses/LICENSE-2.0
  */
@@ -5053,6 +5053,7 @@ var PriceScale = /** @class */ (function () {
         this._private__layoutOptions = layoutOptions;
         this._private__localizationOptions = localizationOptions;
         this._private__markBuilder = new PriceTickMarkBuilder(this, 100, this._private__coordinateToLogical.bind(this), this._private__logicalToCoordinate.bind(this));
+        console.log("[LW]: PRICE SCALE INSTANCIATED : ", id, ": ", options);
     }
     PriceScale.prototype._internal_id = function () {
         return this._private__id;
@@ -6002,6 +6003,7 @@ var Pane = /** @class */ (function () {
         this._private__recalculatePriceScaleImpl(priceScale);
     };
     Pane.prototype._private__createPriceScale = function (id, options) {
+        console.log("[LW]: NEW PRICE SCALE CREATED 1: ", options);
         var actualOptions = __assign({ visible: true, autoScale: true }, clone(options));
         var priceScale = new PriceScale(id, actualOptions, this._private__model._internal_options().layout, this._private__model._internal_options().localization);
         priceScale._internal_setHeight(this._internal_height());
@@ -12212,7 +12214,7 @@ function createChart(container, options) {
  * Returns the current version as a string. For example `'3.3.0'`.
  */
 function version() {
-    return "3.8.0-dev+202208031538";
+    return "3.8.0-dev+202208031558";
 }
 
 export { ColorType, CrosshairMode, LastPriceAnimationMode as LasPriceAnimationMode, LastPriceAnimationMode, LineStyle, LineType, PriceLineSource, PriceScaleMode, TickMarkType, TrackingModeExitMode, createChart, isBusinessDay, isUTCTimestamp, version };

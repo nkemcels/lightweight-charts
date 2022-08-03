@@ -413,6 +413,7 @@ export class Pane implements IDestroyable {
 	}
 
 	private _createPriceScale(id: string, options: OverlayPriceScaleOptions | VisiblePriceScaleOptions): PriceScale {
+		console.log("[LW]: NEW PRICE SCALE CREATED 1: ", options)
 		const actualOptions: PriceScaleOptions = { visible: true, autoScale: true, ...clone(options) };
 		const priceScale = new PriceScale(
 			id,
