@@ -384,6 +384,7 @@ export class ChartApi implements IChartApi, DataUpdatesConsumer<SeriesType> {
 	}
 
 	public removeSeries(seriesApi: SeriesApi<SeriesType>): void {
+		// console.log("[LW] REMOVING SERIES -- CHART API")
 		const series = ensureDefined(this._seriesMap.get(seriesApi));
 
 		const update = this._dataLayer.removeSeries(series);

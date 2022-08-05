@@ -528,7 +528,7 @@ export class ChartModel implements IDestroyable {
 	}
 
 	public createPane(index?: number): Pane {
-		console.log("[LW]: CREATING A NEW PANE...");
+		// console.log("[LW]: CREATING A NEW PANE...");
 		const pane = new Pane(this._timeScale, this);
 
 		if (index !== undefined) {
@@ -829,6 +829,7 @@ export class ChartModel implements IDestroyable {
 	}
 
 	public removeSeries(series: Series): void {
+		// console.log("[LW]: REMOVING SERIES!!");
 		const pane = this.paneForSource(series);
 
 		const seriesIndex = this._serieses.indexOf(series);
@@ -842,6 +843,7 @@ export class ChartModel implements IDestroyable {
 	}
 
 	public moveSeriesToScale(series: Series, targetScaleId: string): void {
+		// console.log("[LW]: MOVING SERIES TO SCALE...");
 		const pane = ensureNotNull(this.paneForSource(series));
 		pane.removeDataSource(series);
 

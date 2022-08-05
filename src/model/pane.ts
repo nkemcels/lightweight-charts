@@ -171,6 +171,7 @@ export class Pane implements IDestroyable {
 	}
 
 	public removeDataSource(source: IPriceDataSource): void {
+		// console.log("[LW]: REMOVING DATA SOURCE FROM PANE!!");
 		const index = this._dataSources.indexOf(source);
 		assert(index !== -1, 'removeDataSource: invalid data source');
 
@@ -286,18 +287,18 @@ export class Pane implements IDestroyable {
 	}
 
 	public recalculatePriceScale(priceScale: PriceScale | null): void {
-		console.log("[LW]: TO RECALCULATE PRICE SCALE ", priceScale, " OPTIONS ", priceScale?.options());
+		// console.log("[LW]: TO RECALCULATE PRICE SCALE ", priceScale, " OPTIONS ", priceScale?.options());
 		if (priceScale === null || !priceScale.isAutoScale()) {
-			console.log("[LW]: SKIPPING BECAUSE IT'S AUTOSCALE FALSE...");
+			// console.log("[LW]: SKIPPING BECAUSE IT'S AUTOSCALE FALSE...");
 			return;
 		}
-		console.log("[LW]: NOT SKIPPING BRO...");
+		// console.log("[LW]: NOT SKIPPING BRO--!!--!!...");
 
 		this._recalculatePriceScaleImpl(priceScale);
 	}
 
 	public resetPriceScale(priceScale: PriceScale): void {
-		console.log("[LW]: RESETTING PRICE SCALE HERE...");
+		// console.log("[LW]: RESETTING PRICE SCALE HERE...");
 		const visibleBars = this._timeScale.visibleStrictRange();
 		priceScale.setMode({ autoScale: true });
 		if (visibleBars !== null) {
@@ -414,7 +415,7 @@ export class Pane implements IDestroyable {
 	}
 
 	private _createPriceScale(id: string, options: OverlayPriceScaleOptions | VisiblePriceScaleOptions): PriceScale {
-		console.log("[LW]: NEW PRICE SCALE CREATED 1: ", options)
+		// console.log("[LW]: NEW PRICE SCALE CREATED 1: ", options)
 		const actualOptions: PriceScaleOptions = { visible: true, autoScale: true, ...clone(options) };
 		const priceScale = new PriceScale(
 			id,

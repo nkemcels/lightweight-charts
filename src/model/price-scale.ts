@@ -248,7 +248,7 @@ export class PriceScale {
 	}
 
 	public applyOptions(options: DeepPartial<PriceScaleOptions>): void {
-		console.log("[LW]: OPTIONS CHANGED: ", options)
+		// console.log("[LW]: OPTIONS CHANGED: ", options)
 		merge(this._options, options);
 		this.updateFormatter();
 
@@ -275,7 +275,7 @@ export class PriceScale {
 			this._invalidateInternalHeightCache();
 			this._marksCache = null;
 		}
-		console.log("[LW]: NEW OPTIONS: ", this._options);
+		// console.log("[LW]: NEW OPTIONS: ", this._options);
 	}
 
 	public isAutoScale(): boolean {
@@ -304,19 +304,19 @@ export class PriceScale {
 
 	// eslint-disable-next-line complexity
 	public setMode(newMode: Partial<PriceScaleState>): void {
-		console.log("[LW]: SET-MODE CALLED")
+		// console.log("[LW]: SET-MODE CALLED")
 		const oldMode = this.mode();
 		let priceRange: PriceRangeImpl | null = null;
 
 		if (newMode.autoScale !== undefined) {
-			console.log("[LW]: SUSPECT 1")
+			// console.log("[LW]: SUSPECT 1")
 			this._options.autoScale = newMode.autoScale;
 		}
 
 		if (newMode.mode !== undefined) {
 			this._options.mode = newMode.mode;
 			if (newMode.mode === PriceScaleMode.Percentage || newMode.mode === PriceScaleMode.IndexedTo100) {
-				console.log("[LW]: SUSPECT 2")
+				// console.log("[LW]: SUSPECT 2")
 				this._options.autoScale = true;
 			}
 			// TODO: Remove after making rebuildTickMarks lazy
@@ -325,16 +325,16 @@ export class PriceScale {
 
 		// define which scale converted from
 		if (oldMode.mode === PriceScaleMode.Logarithmic && newMode.mode !== oldMode.mode) {
-			console.log("[LW]: PROBABLY SUSPECT 3")
+			// console.log("[LW]: PROBABLY SUSPECT 3")
 			if (canConvertPriceRangeFromLog(this._priceRange, this._logFormula)) {
-				console.log("[LW]: SUSPECT 3 FAILED")
+				// console.log("[LW]: SUSPECT 3 FAILED")
 				priceRange = convertPriceRangeFromLog(this._priceRange, this._logFormula);
 
 				if (priceRange !== null) {
 					this.setPriceRange(priceRange);
 				}
 			} else {
-				console.log("[LW]: SUSPECT 3")
+				// console.log("[LW]: SUSPECT 3")
 				this._options.autoScale = true;
 			}
 		}
@@ -566,6 +566,7 @@ export class PriceScale {
 	}
 
 	public removeDataSource(source: IPriceDataSource): void {
+		// console.log("[LW]: REMOVING DATA SOURCE!!!");
 		const index = this._dataSources.indexOf(source);
 		if (index === -1) {
 			throw new Error('source is not attached to scale');
@@ -574,6 +575,7 @@ export class PriceScale {
 		this._dataSources.splice(index, 1);
 
 		if (this._dataSources.length === 0) {
+			// console.log("[LW]: NO DATA SOURCES FOUND!!!");
 			this.setMode({
 				autoScale: true,
 			});

@@ -1,6 +1,6 @@
 /*!
  * @license
- * TradingView Lightweight Charts v3.8.0-dev+202208031723
+ * TradingView Lightweight Charts v3.8.0-dev+202208041555
  * Copyright (c) 2020 TradingView, Inc.
  * Licensed under Apache License 2.0 https://www.apache.org/licenses/LICENSE-2.0
  */
@@ -1502,7 +1502,7 @@
         if (beforeValue === undefined) {
             return newValue;
         }
-        console.log("[LW] MERGING PANE INVALIDATION. ==> BEFORE ", beforeValue, " AND ==> NEWVAL ", newValue);
+        // console.log("[LW] MERGING PANE INVALIDATION. ==> BEFORE ", beforeValue, " AND ==> NEWVAL ", newValue);
         var level = Math.max(beforeValue._internal_level, newValue._internal_level);
         var autoScale = beforeValue._internal_autoScale || newValue._internal_autoScale;
         return { _internal_level: level, _internal_autoScale: autoScale };
@@ -1528,6 +1528,7 @@
                     _internal_level: this._private__globalLevel,
                 };
             }
+            // console.log("[LW]: INVALIDATING PANE ", paneInvalidation);
             return {
                 _internal_level: Math.max(this._private__globalLevel, paneInvalidation._internal_level),
                 _internal_autoScale: paneInvalidation._internal_autoScale,
@@ -5063,7 +5064,7 @@
             return this._private__options;
         };
         PriceScale.prototype._internal_applyOptions = function (options) {
-            console.log("[LW]: OPTIONS CHANGED: ", options);
+            // console.log("[LW]: OPTIONS CHANGED: ", options)
             merge(this._private__options, options);
             this._internal_updateFormatter();
             if (options.mode !== undefined) {
@@ -5084,7 +5085,7 @@
                 this._private__invalidateInternalHeightCache();
                 this._private__marksCache = null;
             }
-            console.log("[LW]: NEW OPTIONS: ", this._private__options);
+            // console.log("[LW]: NEW OPTIONS: ", this._options);
         };
         PriceScale.prototype._internal_isAutoScale = function () {
             return this._private__options.autoScale;
@@ -5107,17 +5108,17 @@
         };
         // eslint-disable-next-line complexity
         PriceScale.prototype._internal_setMode = function (newMode) {
-            console.log("[LW]: SET-MODE CALLED");
+            // console.log("[LW]: SET-MODE CALLED")
             var oldMode = this._internal_mode();
             var priceRange = null;
             if (newMode._internal_autoScale !== undefined) {
-                console.log("[LW]: SUSPECT 1");
+                // console.log("[LW]: SUSPECT 1")
                 this._private__options.autoScale = newMode._internal_autoScale;
             }
             if (newMode._internal_mode !== undefined) {
                 this._private__options.mode = newMode._internal_mode;
                 if (newMode._internal_mode === 2 /* Percentage */ || newMode._internal_mode === 3 /* IndexedTo100 */) {
-                    console.log("[LW]: SUSPECT 2");
+                    // console.log("[LW]: SUSPECT 2")
                     this._private__options.autoScale = true;
                 }
                 // TODO: Remove after making rebuildTickMarks lazy
@@ -5125,16 +5126,16 @@
             }
             // define which scale converted from
             if (oldMode._internal_mode === 1 /* Logarithmic */ && newMode._internal_mode !== oldMode._internal_mode) {
-                console.log("[LW]: PROBABLY SUSPECT 3");
+                // console.log("[LW]: PROBABLY SUSPECT 3")
                 if (canConvertPriceRangeFromLog(this._private__priceRange, this._private__logFormula)) {
-                    console.log("[LW]: SUSPECT 3 FAILED");
+                    // console.log("[LW]: SUSPECT 3 FAILED")
                     priceRange = convertPriceRangeFromLog(this._private__priceRange, this._private__logFormula);
                     if (priceRange !== null) {
                         this._internal_setPriceRange(priceRange);
                     }
                 }
                 else {
-                    console.log("[LW]: SUSPECT 3");
+                    // console.log("[LW]: SUSPECT 3")
                     this._private__options.autoScale = true;
                 }
             }
@@ -5320,12 +5321,14 @@
             this._internal_invalidateSourcesCache();
         };
         PriceScale.prototype._internal_removeDataSource = function (source) {
+            // console.log("[LW]: REMOVING DATA SOURCE!!!");
             var index = this._private__dataSources.indexOf(source);
             if (index === -1) {
                 throw new Error('source is not attached to scale');
             }
             this._private__dataSources.splice(index, 1);
             if (this._private__dataSources.length === 0) {
+                // console.log("[LW]: NO DATA SOURCES FOUND!!!");
                 this._internal_setMode({
                     _internal_autoScale: true,
                 });
@@ -5817,6 +5820,7 @@
             this._private__insertDataSource(source, targetScaleId, targetZOrder);
         };
         Pane.prototype._internal_removeDataSource = function (source) {
+            // console.log("[LW]: REMOVING DATA SOURCE FROM PANE!!");
             var index = this._private__dataSources.indexOf(source);
             assert(index !== -1, 'removeDataSource: invalid data source');
             this._private__dataSources.splice(index, 1);
@@ -5911,16 +5915,16 @@
             return priceScale;
         };
         Pane.prototype._internal_recalculatePriceScale = function (priceScale) {
-            console.log("[LW]: TO RECALCULATE PRICE SCALE ", priceScale, " OPTIONS ", priceScale === null || priceScale === void 0 ? void 0 : priceScale._internal_options());
+            // console.log("[LW]: TO RECALCULATE PRICE SCALE ", priceScale, " OPTIONS ", priceScale?.options());
             if (priceScale === null || !priceScale._internal_isAutoScale()) {
-                console.log("[LW]: SKIPPING BECAUSE IT'S AUTOSCALE FALSE...");
+                // console.log("[LW]: SKIPPING BECAUSE IT'S AUTOSCALE FALSE...");
                 return;
             }
-            console.log("[LW]: NOT SKIPPING BRO...");
+            // console.log("[LW]: NOT SKIPPING BRO--!!--!!...");
             this._private__recalculatePriceScaleImpl(priceScale);
         };
         Pane.prototype._internal_resetPriceScale = function (priceScale) {
-            console.log("[LW]: RESETTING PRICE SCALE HERE...");
+            // console.log("[LW]: RESETTING PRICE SCALE HERE...");
             var visibleBars = this._private__timeScale._internal_visibleStrictRange();
             priceScale._internal_setMode({ _internal_autoScale: true });
             if (visibleBars !== null) {
@@ -6013,7 +6017,7 @@
             this._private__recalculatePriceScaleImpl(priceScale);
         };
         Pane.prototype._private__createPriceScale = function (id, options) {
-            console.log("[LW]: NEW PRICE SCALE CREATED 1: ", options);
+            // console.log("[LW]: NEW PRICE SCALE CREATED 1: ", options)
             var actualOptions = __assign({ visible: true, autoScale: true }, clone(options));
             var priceScale = new PriceScale(id, actualOptions, this._private__model._internal_options().layout, this._private__model._internal_options().localization);
             priceScale._internal_setHeight(this._internal_height());
@@ -7308,7 +7312,7 @@
             this._internal_recalculateAllPanes();
         };
         ChartModel.prototype._internal_createPane = function (index) {
-            console.log("[LW]: CREATING A NEW PANE...");
+            // console.log("[LW]: CREATING A NEW PANE...");
             var pane = new Pane(this._private__timeScale, this);
             if (index !== undefined) {
                 this._private__panes.splice(index, 0, pane);
@@ -7534,6 +7538,7 @@
             return series;
         };
         ChartModel.prototype._internal_removeSeries = function (series) {
+            // console.log("[LW]: REMOVING SERIES!!");
             var pane = this._internal_paneForSource(series);
             var seriesIndex = this._private__serieses.indexOf(series);
             assert(seriesIndex !== -1, "Series not found");
@@ -7544,6 +7549,7 @@
             }
         };
         ChartModel.prototype._internal_moveSeriesToScale = function (series, targetScaleId) {
+            // console.log("[LW]: MOVING SERIES TO SCALE...");
             var pane = ensureNotNull(this._internal_paneForSource(series));
             pane._internal_removeDataSource(series);
             // check if targetScaleId exists
@@ -12229,6 +12235,7 @@
             return res;
         };
         ChartApi.prototype.removeSeries = function (seriesApi) {
+            // console.log("[LW] REMOVING SERIES -- CHART API")
             var series = ensureDefined(this._private__seriesMap.get(seriesApi));
             var update = this._private__dataLayer._internal_removeSeries(series);
             var model = this._private__chartWidget._internal_model();
@@ -12333,7 +12340,7 @@
      * Returns the current version as a string. For example `'3.3.0'`.
      */
     function version() {
-        return "3.8.0-dev+202208031723";
+        return "3.8.0-dev+202208041555";
     }
 
     var LightweightChartsModule = /*#__PURE__*/Object.freeze({

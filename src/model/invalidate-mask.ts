@@ -16,7 +16,7 @@ function mergePaneInvalidation(beforeValue: PaneInvalidation | undefined, newVal
 	if (beforeValue === undefined) {
 		return newValue;
 	}
-	console.log("[LW] MERGING PANE INVALIDATION. ==> BEFORE ", beforeValue, " AND ==> NEWVAL ", newValue);
+	// console.log("[LW] MERGING PANE INVALIDATION. ==> BEFORE ", beforeValue, " AND ==> NEWVAL ", newValue);
 	const level = Math.max(beforeValue.level, newValue.level);
 	const autoScale = beforeValue.autoScale || newValue.autoScale;
 	return { level, autoScale };
@@ -86,6 +86,7 @@ export class InvalidateMask {
 				level: this._globalLevel,
 			};
 		}
+		// console.log("[LW]: INVALIDATING PANE ", paneInvalidation);
 		return {
 			level: Math.max(this._globalLevel, paneInvalidation.level),
 			autoScale: paneInvalidation.autoScale,
